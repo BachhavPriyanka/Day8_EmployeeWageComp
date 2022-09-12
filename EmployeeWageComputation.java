@@ -1,84 +1,92 @@
 package day8_EmployeeWage;
 
-public class EmployeeWageComputation {
+interface EmployeeWage{
 
-	public static final int IS_PART_TIME = 1;
-    public static final int IS_FULL_TIME = 2;
+	 public void computeEmpWage(CompanyEmpWage obj);
+	}
 
-    private int numOfCompany = 0;
-    private CompanyEmpWage[] companyEmpWage;
+	public class EmployeeWageComputation implements EmployeeWage {
+	    final int IS_PART_TIME = 1;
+	    final int IS_FULL_TIME = 2;
 
-    public EmployeeWageComputation() {
-        companyEmpWage = new CompanyEmpWage[5];
-    }
-    private void addCompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
-        companyEmpWage[numOfCompany] = new  CompanyEmpWage(company, empRatePerHour, numOfWorkingDays, maxHoursPerMonth);
-        numOfCompany++;
-    }
-    private void computeEmpWage() {
-        for (int i = 0; i < numOfCompany; i++) {
-            companyEmpWage[i].setTotalEmpWage(this. computeEmpWage(companyEmpWage[i]));
-            System.out.println(companyEmpWage[i]);
-        }
-    }
+	    public void computeEmpWage(CompanyEmpWage companyEmpWage) {
+	        int empHrs = 0;
+	        int totalWorkingDays = 0;
+	        int totalEmpHrs = 0;
+	        int totalEmpWage = 0;
+	        while (totalWorkingDays < companyEmpWage.getNumOfWorkingDays() && totalEmpHrs <=  companyEmpWage.getMaxHoursPerMonth()) {
 
-    private int computeEmpWage(CompanyEmpWage companyEmpWage) {
-        int empHrs = 0;
-        int totalWorkingDays = 0;
-        int totalEmpHrs = 0;
-        while (totalEmpHrs <=  companyEmpWage.maxHoursPerMonth && totalWorkingDays <  companyEmpWage.numOfWorkingDays) {
-            totalWorkingDays++;
-            int empCheck = (int) Math.floor(Math.random() * 10) % 3;
-            switch (empCheck) {
-                case IS_PART_TIME:
-                    System.out.println("Employee is Present");
-                    empHrs = 4;
-                    break;
-                case IS_FULL_TIME:
-                    System.out.println("Employee is Present");
-                    empHrs = 8;
-                    break;
-                default:
-                    System.out.println("Employee is Absent");
-                    empHrs = 0;
-            }
-            totalEmpHrs += empHrs;
-            System.out.println("Day : " + totalWorkingDays + "Emp Hr: " +empHrs);
+	            int empCheck = (int) ((Math.random() * 10) % 3);
+	            switch (empCheck) {
+	                case IS_PART_TIME:
+	                    //    System.out.println("Employee is Present");
+	                    empHrs = 4;
+	                    break;
+	                case IS_FULL_TIME:
+	                    //    System.out.println("Employee is Present");
+	                    empHrs = 8;
+	                    break;
+	                default:
+	                    //    System.out.println("Employee is Absent");
+	                    empHrs = 0;
+	            }
+	            totalWorkingDays++;
+	            totalEmpHrs = totalEmpHrs + empHrs;
+	        }
+	        companyEmpWage.setTotalEmpWage( totalEmpHrs * companyEmpWage.empRatePerHour );
+	        System.out.println("Employee Monthly Wage of " + companyEmpWage.getCompanyName() + " is " + companyEmpWage.getTotalEmpWage());
+	    }
+	    public static void main(String[] args) {
+	        System.out.println("---Welcome to Employee Wage Computation---");
+	        EmployeeWageComputation emp = new EmployeeWageComputation();
+	        
+	        CompanyEmpWage[] company = new CompanyEmpWage[10];
+	        
+	        company[0] = new CompanyEmpWage("Priyanka", 26, 10, 50);
+	        emp.computeEmpWage(company[0]);
+	        company[1] = new CompanyEmpWage("Saqlain", 87, 22, 81);
+	        emp.computeEmpWage(company[1]);
+	        company[2] = new CompanyEmpWage("hansani",45, 90, 72);
+	        emp.computeEmpWage(company[2]);
+	    }
+	}
 
-        }
-        return totalEmpHrs * companyEmpWage.empRatePerHour;
-    }
-    public static void main(String[] args) {
-        System.out.println("---Welcome to Employee Wage Computation Program---");
-        System.out.println();
-        EmployeeWageComputation  EmployeeWage = new  EmployeeWageComputation();
-        EmployeeWage.addCompanyEmpWage("priyanka",33,2,12);
-        EmployeeWage.addCompanyEmpWage("Diksha", 46, 2, 30);
-        EmployeeWage.computeEmpWage();
+	class CompanyEmpWage {
 
-    }
+	    public String company=" ";
+	    public int empRatePerHour=0;
+	    public int numOfWorkingDays=0;
+	    public int maxHoursPerMonth=0;
+	    public int totalEmpWage=0;
 
-    public class CompanyEmpWage {
+	    public CompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
+	        this.company = company;
+	        this.empRatePerHour = empRatePerHour;
+	        this.numOfWorkingDays = numOfWorkingDays;
+	        this.maxHoursPerMonth = maxHoursPerMonth;
+	    }
+	    //GETTERS method to get variables
+	    public String getCompanyName(){
+	        return company;
+	    }
+	    public int getEmpRatePerHour(){
+	        return empRatePerHour;
+	    }
 
-        public final String company;
-        public final int empRatePerHour;
-        public final int numOfWorkingDays;
-        public final int maxHoursPerMonth;
-        public  int totalEmpWage;
+	    public int getNumOfWorkingDays(){
+	        return numOfWorkingDays;
+	    }
 
-        public CompanyEmpWage(String company, int empRatePerHour, int numOfWorkingDays, int maxHoursPerMonth) {
-            this.company = company;
-            this.empRatePerHour = empRatePerHour;
-            this.numOfWorkingDays = numOfWorkingDays;
-            this.maxHoursPerMonth = maxHoursPerMonth;
-        }
-        public void setTotalEmpWage(int totalEmpWage) {
-            this.totalEmpWage = totalEmpWage;
-        }
-        @Override
-        public String toString() {
-            return "Total Emp Wage for Company : " +company+" is: "+ totalEmpWage;
-        }
-    }
+	    public int getMaxHoursPerMonth(){
+	        return maxHoursPerMonth;
+	    }
 
-}
+	    public void setTotalEmpWage( int totalEmpWage ){
+	        this.totalEmpWage = totalEmpWage;
+	    }
+
+	    public int getTotalEmpWage(){
+	        return totalEmpWage;
+	    }
+
+	}
